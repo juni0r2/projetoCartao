@@ -1,0 +1,26 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+        http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
+
+	<persistence-unit name="conta">
+		
+		<class>br.com.sisprintcard.model.EnSamBeneficiarioCartaoIdentif</class>
+		<class>br.com.sisprintcard.model.EnImpressora</class>
+
+		<properties>
+
+			<property name="javax.persistence.jdbc.driver" value="oracle.jdbc.driver.OracleDriver" />
+			<property name="javax.persistence.jdbc.url"	value="jdbc:oracle:thin:@172.16.32.32:1521/DBCAIXADV" />
+			<property name="javax.persistence.jdbc.user" value="USSISGS" />
+			<property name="javax.persistence.jdbc.password" value="uJzW9407prUL" />
+
+			<property name="hibernate.dialect"	value="org.hibernate.dialect.Oracle12cDialect" />
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.use_sql_comments" value="true" />
+		</properties>
+
+	</persistence-unit>
+</persistence>
