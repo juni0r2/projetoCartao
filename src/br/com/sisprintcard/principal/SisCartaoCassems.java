@@ -27,17 +27,17 @@ public class SisCartaoCassems {
 	}
 
 	private static Long[] recebeAtributos(String[] args) {
-		String idUsuario = "288258";
-		String idImpressora = "241";
-//	    String idImpressora = args[1];
-//		String idUsuario = args[0];
+//		String idUsuario = "288258";
+//		String idImpressora = "241";
+	    String idImpressora = args[1];
+		String idUsuario = args[0];
 
 		if (idUsuario == null || idUsuario.trim().isEmpty())
-			throw new UsuarioNaoEncontradoException("Usuario nao encontrado");
+			throw new UsuarioNaoEncontradoException("Usuário nao encontrado");
 		else
 		
 		if (idImpressora == null || idImpressora.trim().isEmpty())
-			throw new UsuarioNaoEncontradoException("Impressora nao encontrada");
+			throw new UsuarioNaoEncontradoException("Impressora não encontrada");
 
 		Long[] variaveis = { Long.parseLong(idUsuario), Long.parseLong(idImpressora) };
 		return variaveis;

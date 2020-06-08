@@ -33,36 +33,38 @@ public class ImprimeCardService {
 			entityManager.close();
 
 			if (impressora == null) {
-				System.out.println("\nImpressora nao localizada...");
+				System.out.println("\nImpressora não localizada ...");
 				return;
 			}
 
 			if (usuario == null) {
-				System.out.println("\nUsuario nao encontrado...");
+				System.out.println("\nUsuário não encontrado...");
 				return;
 			}
-
-			System.out.println("\nDados da Impressora :: ");
-			System.out.println(impressora);
-			System.out.println("Imprimir Dados do Beneficiario :: ");
 
 			DadosParaImpressaoDto build = DadosParaImpressaoDto.builder()
 					.beneficiarioCartaoIdentif(usuario.getKTrilhaCarenciaCartao()).impressora(impressora.getNome())
 					.build();
 
+			
+			UsuarioImpressaoDTO usuarioImpressaoDTO = extraiDadosBeneficiario(build);
+			System.out.println("Dados do Beneficiário :: ");
+			System.out.println("Nome : "+ usuarioImpressaoDTO.getNome());
+
+			System.out.println("\nDados da Impressora :: ");
+			System.out.println(impressora);
+
 			if (verificaStatusImpressora(impressora.getNome()))
 				return;
 
-			Imprimir(build);
+			Imprimir(build.getImpressora(), usuarioImpressaoDTO);
 
 		} catch (UsuarioNaoEncontradoException w) {
 			w.printStackTrace();
 		}
 	}
 
-	private void Imprimir(DadosParaImpressaoDto dadosParaImpressaoDto) {
-
-		String mPrinterName = dadosParaImpressaoDto.getImpressora();
+	private void Imprimir(String mPrinterName, UsuarioImpressaoDTO usuario) {
 
 		final int S_OK = 0;
 		byte returnXML[] = new byte[XPS_Java_SDK.BUFFSIZE];
@@ -72,9 +74,7 @@ public class ImprimeCardService {
 		boolean bJobStarted = false;
 		String returnValue;
 
-		UsuarioImpressaoDTO dto = extraiDadosBeneficiario(dadosParaImpressaoDto);
-
-		if (dto.getVersao().length() > 2) {
+		if (usuario.getVersao().length() > 2) {
 			return;
 		}
 
@@ -82,14 +82,14 @@ public class ImprimeCardService {
 
 		System.setProperty("jna.library.path", "C:\\TEMP\\");
 
-		if (dto.getCpf().length() == 0)
-			dto.setCpf("0");
+		if (usuario.getCpf().length() == 0)
+			usuario.setCpf("0");
 
-		if (dto.getCpf().contains("OBRIGAT"))
-			dto.setCpf("0");
+		if (usuario.getCpf().contains("OBRIGAT"))
+			usuario.setCpf("0");
 
-		if (dto.getCpf().length() != 11)
-			dto.setCpf("0");
+		if (usuario.getCpf().length() != 11)
+			usuario.setCpf("0");
 
 		if (S_OK == XpsDriverInteropLib.INSTANCE.StartJob(mPrinterName, returnXML, sizeOfReturnXML)) {
 			bJobStarted = true;
@@ -102,14 +102,14 @@ public class ImprimeCardService {
 			// get PrintJobID
 			printerStatusXml.Parse(returnXML, sizeOfReturnXML);
 
-			String matriculaFormatada = dto.getMatricula().replace("-", "").replace(".", "") + "=109=1=" + dto.getVersao();
+			String matriculaFormatada = usuario.getMatricula().replace("-", "").replace(".", "") + "=109=1=" + usuario.getVersao();
 			sizeOfReturnXML[0] = XPS_Java_SDK.BUFFSIZE;
 
-			String nomeTarjaMagnetica = RemoverAcentos.remover(dto.getNome());
-			System.out.println(nomeTarjaMagnetica + " - " + matriculaFormatada + " - " + dto.getCpf());
+			String nomeTarjaMagnetica = RemoverAcentos.remover(usuario.getNome());
+			System.out.println(nomeTarjaMagnetica + " - " + matriculaFormatada + " - " + usuario.getCpf());
 
 			if (S_OK == XpsDriverInteropLib.INSTANCE.MagstripeEncode(mPrinterName, nomeTarjaMagnetica,
-					nomeTarjaMagnetica.length(), matriculaFormatada, matriculaFormatada.length(), dto.getCpf(), dto.getCpf().length(),
+					nomeTarjaMagnetica.length(), matriculaFormatada, matriculaFormatada.length(), usuario.getCpf(), usuario.getCpf().length(),
 					returnXML, sizeOfReturnXML)) {
 				System.out.format("'%s' Magstripe Encode Succeed\n", mPrinterName);
 				bDisplayError = false;
@@ -145,12 +145,12 @@ public class ImprimeCardService {
 		} else {
 
 			Integer modelo = 0;
-			new JavaPrint(mPrinterName, dto, modelo);
+			new JavaPrint(mPrinterName, usuario, modelo);
 //			JavaPrint javaPrint = new JavaPrint(mPrinterName, matricula, nome, tipoDependencia, dataVencimento, versao,
 //					dataNascimento, municipio, orgao, tipoPlano, carenciaL1, carenciaL2, carenciaL3, modelo,
 //					matricOrgao);
 //					javaPrint.Print();
-			System.out.println("\n\nImprimindo Cartao ... ");
+			System.out.println("\n\nImprimindo Cartão ... ");
 
 			// need to wait for data get spooler before calling EndJob
 			try {
@@ -243,10 +243,10 @@ public class ImprimeCardService {
 			System.out.println("\nErro Impressora :: " + jp.GetErrorMessage());
 			return true;
 		} else if (jp.toString() == null) {
-			System.out.println("Impressora Não Encontrada.");
+			System.out.println("\nImpressora Offline.");
 			return true;
 		} else {
-			System.out.println("Impressora Online");
+			System.out.println("\nImpressora Online.");
 			return false;
 		}
 	}

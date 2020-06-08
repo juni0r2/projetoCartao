@@ -44,7 +44,7 @@ public class EnImpressora implements Serializable {
     
     @Override
     public String toString() {
-    	return "\nNome : "+ this.nome +"\nIP : " + this.ip + "\nLocalizacao : "+ this.localizacao;
+    	return "Nome : "+ this.nome +"\nIP : " + this.ip + "\nLocalizacao : "+ this.localizacao;
     }
 
 }
