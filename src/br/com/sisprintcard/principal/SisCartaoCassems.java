@@ -1,10 +1,15 @@
 package br.com.sisprintcard.principal;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import br.com.sisprintcard.common.XPS_Java_SDK;
 import br.com.sisprintcard.exception.UsuarioNaoEncontradoException;
 import br.com.sisprintcard.service.ImprimeCardService;
 
 public class SisCartaoCassems {
+	
+	static final Logger logger = LogManager.getLogger(SisCartaoCassems.class.getName());
 
 	public static void main(String[] args) {
 
@@ -13,22 +18,6 @@ public class SisCartaoCassems {
 			Long[] atributo = recebeAtributos(args);
 			
 			new ImprimeCardService().imprimir(atributo[0], atributo[1]);
-//			EntityManagerFactory createEntityManagerFactory = Persistence.createEntityManagerFactory("conta");
-//			EntityManager em = createEntityManagerFactory.createEntityManager();
-//			EnSamBeneficiarioCartaoIdentif usuario = new BeneficiarioDAO(em).buscaPorId(atributo[0]);
-//			EnImpressora impressora = new ImpressoraDAO(em).buscaPorId(atributo[1]);
-//			createEntityManagerFactory.close();
-//
-//			if (impressora != null && usuario != null) {
-//
-//				System.out.println("\nDados da Impressora :: ");
-//				System.out.println(impressora);
-//				System.out.println("Imprimir Dados do Beneficiario :: ");
-//
-//				DadosParaImpressaoDto build = DadosParaImpressaoDto.builder()
-//						.beneficiarioCartaoIdentif(usuario.getKTrilhaCarenciaCartao()).impressora(impressora.getNome())
-//						.build();
-//			}
 
 		} catch (UsuarioNaoEncontradoException w) {
 			w.printStackTrace();
@@ -44,11 +33,11 @@ public class SisCartaoCassems {
 //		String idUsuario = args[0];
 
 		if (idUsuario == null || idUsuario.trim().isEmpty())
-			throw new UsuarioNaoEncontradoException("Usuário não encontrado");
+			throw new UsuarioNaoEncontradoException("Usuario nao encontrado");
 		else
 		
 		if (idImpressora == null || idImpressora.trim().isEmpty())
-			throw new UsuarioNaoEncontradoException("Impressora não encontrada");
+			throw new UsuarioNaoEncontradoException("Impressora nao encontrada");
 
 		Long[] variaveis = { Long.parseLong(idUsuario), Long.parseLong(idImpressora) };
 		return variaveis;

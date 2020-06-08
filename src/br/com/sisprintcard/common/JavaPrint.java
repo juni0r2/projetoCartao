@@ -22,6 +22,7 @@ import javax.print.attribute.standard.MediaSize;
 import javax.print.attribute.standard.OrientationRequested;
 import javax.print.attribute.standard.Sides;
 
+import br.com.sisprintcard.dto.UsuarioImpressaoDTO;
 import net.sf.jasperreports.engine.type.OrientationEnum;
 
 public class JavaPrint implements Printable {
@@ -117,6 +118,27 @@ public class JavaPrint implements Printable {
 	public JavaPrint(String mPrinterName2, boolean b, boolean c, String string, boolean d, Object object,
 			Object object2, boolean e) {
 		// TODO Auto-generated constructor stub
+	}
+
+	public JavaPrint(String mPrinterName, UsuarioImpressaoDTO dto, Integer modelo) {
+		this.mPrinterName = mPrinterName;
+		this.mDuplex = true;
+		this.mLandscape = true;
+		this.mCopyCount = 1;
+		this.mMatricula = dto.getMatricula();
+		this.mNome = dto.getNome();
+		this.mTipoDependencia = dto.getTipoDependencia();
+		this.mValidade = dto.getDataVencimento();
+		this.mVersao = dto.getVersao();
+		this.mDataNascimento = dto.getDataNascimento();
+		this.mMunicipio = dto.getMunicipio();
+		this.mOrgao = dto.getOrgao();
+		this.mTipoPlano = dto.getTipoPlano();
+		this.mCarencias1 = dto.getCarenciaL1();
+		this.mCarencias2 = dto.getCarenciaL2();
+		this.mCarencias3 = dto.getCarenciaL3();
+		this.modelo = modelo;
+		this.mMatricOrgao = dto.getMatricOrgao();
 	}
 
 	private PrintService GetPrinterService() {
@@ -224,7 +246,7 @@ public class JavaPrint implements Printable {
 				graphics2D.setFont(new Font(null, Font.BOLD, 7));
 				graphics2D.drawString(mTipoDependencia, (int) 12, (int) 120);
 				graphics2D.drawString("VALIDADE: " + mValidade, (int) 12, (int) 135);
-				graphics2D.drawString("Vers√£o: " + mVersao, (int) 12, (int) 145);
+				graphics2D.drawString("Vers„o: " + mVersao, (int) 12, (int) 145);
 			}
 
 			return (Printable.PAGE_EXISTS);
@@ -243,7 +265,7 @@ public class JavaPrint implements Printable {
 				graphics2D.setFont(new Font(null, Font.BOLD, 6));
 				graphics2D.drawString("DATA NASC: " + mDataNascimento + " MUNICIPIO: " + mMunicipio, (int) -220,
 						(int) -82);
-				graphics2D.drawString("TIPO PLANO: " + mTipoPlano + "  Vers√£o: " + mVersao, (int) -220, (int) -75);
+				graphics2D.drawString("TIPO PLANO: " + mTipoPlano + "  Vers„o: " + mVersao, (int) -220, (int) -75);
 
 				Line2D.Double line = new Line2D.Double();
 				line.setLine(-240, -60, pageWidth, -60);
@@ -252,14 +274,14 @@ public class JavaPrint implements Printable {
 				graphics2D.drawString("INSC GEAP: " + mMatricOrgao, (int) -220, (int) -62);
 
 				graphics2D.setFont(new Font(null, Font.BOLD, 6));
-				graphics2D.drawString("URG√äNCIA/EMERG√äNCIA - CLINICA CAMPO GRANDE E HOSP. PENFIGO", (int) -220,
+				graphics2D.drawString("URG NCIA/EMERG NCIA - CLINICA CAMPO GRANDE E HOSP. PENFIGO", (int) -220,
 						(int) -55);
 
 				graphics2D.drawString("Consultas em endocrinologia, geriatria, otorrinolaringologia, urologia,",
 						(int) -220, (int) -48);
-				graphics2D.drawString("reumatologia e Proctologia;  Procedimentos endosc√≥picos;", (int) -220,
+				graphics2D.drawString("reumatologia e Proctologia;  Procedimentos endoscÛpicos;", (int) -220,
 						(int) -41);
-				graphics2D.drawString("Outras necessidades, obter autoriza√ß√£o diretamente com a GEAP/MS.", (int) -220,
+				graphics2D.drawString("Outras necessidades, obter autorizaÁ„o diretamente com a GEAP/MS.", (int) -220,
 						(int) -34);
 			} else { // Impress√£o Cart√£o Normal if(modelo == 1)
 				graphics2D = (Graphics2D) g;
@@ -274,14 +296,14 @@ public class JavaPrint implements Printable {
 				// graphics2D.drawString("CNS: 1234567891011", (int) -220, (int) -90);
 				graphics2D.drawString("DATA NASC: " + mDataNascimento + " MUNICIPIO: " + mMunicipio, (int) -220,
 						(int) -82);
-				graphics2D.drawString("√ìRG√ÉO: " + mOrgao, (int) -220, (int) -75);
+				graphics2D.drawString("”RG√O: " + mOrgao, (int) -220, (int) -75);
 
 				Line2D.Double line = new Line2D.Double();
 				line.setLine(-240, -60, pageWidth, -60);
 				// graphics2D.draw(line);
 
 				graphics2D.drawString("TIPO PLANO: " + mTipoPlano, (int) -220, (int) -62);
-				graphics2D.drawString("CAR√äNCIAS:", (int) -220, (int) -55);
+				graphics2D.drawString("CAR NCIAS:", (int) -220, (int) -55);
 				graphics2D.drawString(mCarencias1, (int) -220, (int) -48);
 				graphics2D.drawString(mCarencias2, (int) -220, (int) -41);
 				graphics2D.drawString(mCarencias3, (int) -220, (int) -34);

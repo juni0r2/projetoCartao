@@ -3,9 +3,14 @@ package br.com.sisprintcard.dao;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import br.com.sisprintcard.model.EnImpressora;
 
 public class ImpressoraDAO {
+	
+	static final Logger logger = LogManager.getLogger(ImpressoraDAO.class.getName());
 
 	private EntityManager em;
 	
